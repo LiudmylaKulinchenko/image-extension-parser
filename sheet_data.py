@@ -8,7 +8,10 @@ COLUMN_NAME = "SIZE"
 
 def get_sheet_data() -> pd.DataFrame:
     """Upload data from sheet"""
-    url = f"https://docs.google.com/spreadsheets/d/{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
+    url = (
+        f"https://docs.google.com/spreadsheets/d/"
+        f"{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
+    )
     df = pd.read_csv(url)
 
     return df
@@ -24,7 +27,9 @@ def get_image_urls() -> tuple[pd.DataFrame, int]:
 
 
 def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
-    """The generator divides the urls into dictionaries (packs) <= 10_000 each"""
+    """
+    The generator divides the urls into dictionaries (packs) <= 10_000 each
+    """
     start = 0
     packs_amount = size // 10_000 + 1
 
