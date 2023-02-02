@@ -41,5 +41,5 @@ if __name__ == "__main__":
     print(
         f"Start time: {start_pretty}\n"
         f"Finish time: {finish_pretty}\n"
-        f"Execution: {start - finish}"
+        f"Execution: {finish - start}"
     )
