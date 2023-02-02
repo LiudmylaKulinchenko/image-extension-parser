@@ -1,6 +1,5 @@
 import asyncio
 import time
-from typing import Tuple
 
 from image_size import get_images_sizes, merge_dicts
 from sheet_data import (
@@ -11,8 +10,8 @@ from sheet_data import (
 
 
 def main():
-    df, df_size = get_image_urls()
-    get_urls_packs = split_urls_into_package(df, df_size)
+    dataframe, dataframe_size = get_image_urls()
+    get_urls_packs = split_urls_into_package(dataframe[:100], dataframe_size)
 
     all_sizes_list = []
     for pack in get_urls_packs:

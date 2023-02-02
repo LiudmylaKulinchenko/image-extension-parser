@@ -12,21 +12,21 @@ def get_sheet_data() -> pd.DataFrame:
         f"https://docs.google.com/spreadsheets/d/"
         f"{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
     )
-    df = pd.read_csv(url)
+    dataframe = pd.read_csv(url)
 
-    return df
+    return dataframe
 
 
 def get_image_urls() -> tuple[pd.DataFrame, int]:
     """Return tuple with DataFrame of image_urls and DataFrame size"""
-    df = get_sheet_data()
-    image_urls_df = df["image_url"][1:]
-    df_size = image_urls_df.size
+    dataframe = get_sheet_data()
+    image_urls_dataframe = dataframe["image_url"][1:]
+    dataframe_size = image_urls_dataframe.size
 
-    return image_urls_df, df_size
+    return image_urls_dataframe, dataframe_size
 
 
-def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
+def split_urls_into_package(dataframe: pd.DataFrame, size: int) -> dict:
     """
     The generator divides the urls into dictionaries (packs) <= 10_000 each
     """
@@ -35,10 +35,10 @@ def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
 
     for i in range(packs_amount):
         stop = 10_000 * (i + 1)
-        yield df[start:stop].to_dict()
+        yield dataframe[start:stop].to_dict()
         start += 10_000
 
-    return df[start:].to_dict()
+    return dataframe[start:].to_dict()
 
 
 def update_sheet_size_column(sizes: dict):
