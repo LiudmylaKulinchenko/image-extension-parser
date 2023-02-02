@@ -32,12 +32,3 @@ async def get_images_sizes(image_urls_: dict):
                 for image_row, image_url in image_urls_.items()
             ]
         )
-
-
-def merge_dicts(list_of_dicts: list) -> dict:
-    merged_dict = {}
-
-    for dictionary in list_of_dicts:
-        merged_dict.update(dictionary)
-
-    return merged_dict
