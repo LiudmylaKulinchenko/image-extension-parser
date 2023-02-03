@@ -30,7 +30,7 @@ def split_urls_into_package(dataframe: pd.DataFrame, size: int) -> dict:
     """
     The generator divides the urls into dictionaries (packs) <= 10_000 each
     """
-    pack_size = 10
+    pack_size = 10_000
     packs_amount = size // pack_size + 1
 
     for i in range(packs_amount):
