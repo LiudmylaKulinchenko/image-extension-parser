@@ -31,8 +31,6 @@ def main():
 
     update_sheet_size_column(all_sizes)
 
-    return all_sizes
-
 
 if __name__ == "__main__":
     start = datetime.now()
