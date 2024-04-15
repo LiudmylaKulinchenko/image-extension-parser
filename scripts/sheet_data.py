@@ -1,3 +1,4 @@
+import logging
 import os
 import configparser
 
@@ -25,7 +26,7 @@ def get_sheet_data() -> pd.DataFrame:
 
     df = pd.read_csv(url)
 
-    print("Successfully read image df")
+    logging.info("Successfully retrieved Sheet data and created DataFrame")
 
     return df
 
@@ -46,22 +47,26 @@ def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
     packs_amount = size // pack_size + 1
 
     for i in range(packs_amount):
-        yield df[pack_size * i: pack_size * (i + 1)].to_dict()
-    print(f"Urls splitted into {packs_amount} packs")
-    return df[pack_size * packs_amount:].to_dict()
+        yield df[pack_size * i : pack_size * (i + 1)].to_dict()
+
+    logging.info(f"Urls splitted into {packs_amount} packs")
+
+    return df[pack_size * packs_amount :].to_dict()
 
 
-def update_sheet_size_column(sizes: dict):
-    """Update size column with new data"""
+def create_excel_file_with_image_sizes(sizes: dict):
+    """Create excel fiel with image sizes data"""
     images_df = get_sheet_data()
     sizes_list = list(sizes.values())
     sizes_df = pd.DataFrame({SIZE_COLUMN_NAME: sizes_list})
     images_df.update(sizes_df)
 
-    with pd.ExcelWriter(f"../data/IMAGE_SIZES_RESULT_FILE", engine="openpyxl") as writer:
+    with pd.ExcelWriter(
+        f"../data/{IMAGE_SIZES_RESULT_FILE}", engine="openpyxl"
+    ) as writer:
         images_df.to_excel(writer, sheet_name=SHEET_NAME, index=False)
 
-    print("Sizes excel file created succesfully")
+    print("Succesfully created sizes excel file")
 
 
 if __name__ == "__main__":

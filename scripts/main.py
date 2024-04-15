@@ -1,11 +1,20 @@
 import asyncio
+import logging
 from datetime import datetime
 
 from image_size import get_images_sizes
 from sheet_data import (
     get_image_urls,
     split_urls_into_package,
-    update_sheet_size_column
+    create_excel_file_with_image_sizes,
+)
+
+
+logging.basicConfig(
+    filename="../logs/main.log",
+    filemode="w",
+    level=logging.DEBUG,
+    format="%(name)s - %(levelname)s - %(message)s",
 )
 
 
@@ -23,13 +32,17 @@ def main():
     get_urls_packs = split_urls_into_package(images_df, df_size)
 
     all_sizes_list = []
+    pack_number = 1
     for pack in get_urls_packs:
+        logging.info(f"Start asynchronous collection of image sizes for pack {pack}")
         image_sizes = asyncio.run(get_images_sizes(pack))
+        logging.info(f"Successfull finish getting image sizes for pack {pack}")
         all_sizes_list += image_sizes
+        pack_number += 1
 
     all_sizes = merge_dicts(all_sizes_list)
 
-    update_sheet_size_column(all_sizes)
+    create_excel_file_with_image_sizes(all_sizes)
 
 
 if __name__ == "__main__":
@@ -37,7 +50,7 @@ if __name__ == "__main__":
     main()
     finish = datetime.now()
 
-    print(
+    logging.info(
         f"Start time: {start.strftime('%H:%M:%S')}\n"
         f"Finish time: {finish.strftime('%H:%M:%S')}\n"
         f"Execution: {(finish - start).total_seconds() * 10 ** 3} ms"
