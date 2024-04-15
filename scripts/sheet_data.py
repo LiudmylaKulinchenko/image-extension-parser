@@ -1,9 +1,10 @@
-import logging
 import os
 import configparser
 
 import pandas as pd
 from dotenv import load_dotenv
+
+from logger_setup import logger
 
 load_dotenv()
 
@@ -26,7 +27,7 @@ def get_sheet_data() -> pd.DataFrame:
 
     df = pd.read_csv(url)
 
-    logging.info("Successfully retrieved Sheet data and created DataFrame")
+    logger.info("Successfully retrieved Sheet data and created DataFrame")
 
     return df
 
@@ -49,7 +50,7 @@ def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
     for i in range(packs_amount):
         yield df[pack_size * i : pack_size * (i + 1)].to_dict()
 
-    logging.info(f"Urls splitted into {packs_amount} packs")
+    logger.info(f"Urls splitted into {packs_amount} packs")
 
     return df[pack_size * packs_amount :].to_dict()
 

@@ -1,9 +1,10 @@
 import asyncio
-import logging
 from io import BytesIO
 
 import aiohttp
 from PIL import Image
+
+from logger_setup import logger
 
 
 async def process_image(content) -> str:
@@ -12,7 +13,7 @@ async def process_image(content) -> str:
         with Image.open(BytesIO(content)) as image:
             return f"{image.size[0]}x{image.size[1]}"
     except Image.UnidentifiedImageError:
-        logging.warning("InvalidImage error while processing image")
+        logger.warning("InvalidImage error while processing image")
         return "InvalidImage"
 
 

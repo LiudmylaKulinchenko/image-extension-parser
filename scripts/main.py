@@ -1,5 +1,4 @@
 import asyncio
-import logging
 from datetime import datetime
 
 from image_size import get_images_sizes
@@ -8,14 +7,7 @@ from sheet_data import (
     split_urls_into_package,
     create_excel_file_with_image_sizes,
 )
-
-
-logging.basicConfig(
-    filename="../logs/main.log",
-    filemode="w",
-    level=logging.DEBUG,
-    format="%(name)s - %(levelname)s - %(message)s",
-)
+from logger_setup import logger
 
 
 def merge_dicts(list_of_dicts: list) -> dict:
@@ -34,12 +26,16 @@ def main():
     all_sizes_list = []
     pack_number = 1
     for pack in get_urls_packs:
-        logging.info(f"Start asynchronous collection of image sizes for pack {pack}")
+        logger.info(
+            f"Start asynchronous collection of image sizes for pack {pack_number}"
+        )
         image_sizes = asyncio.run(get_images_sizes(pack))
-        logging.info(f"Successfull finish getting image sizes for pack {pack}")
         all_sizes_list += image_sizes
+
+        logger.info(f"Successfull finish getting image sizes for pack {pack_number}")
         pack_number += 1
 
+    logger.info(f"Successfull finish getting image sizes for all packs")
     all_sizes = merge_dicts(all_sizes_list)
 
     create_excel_file_with_image_sizes(all_sizes)
@@ -50,7 +46,7 @@ if __name__ == "__main__":
     main()
     finish = datetime.now()
 
-    logging.info(
+    logger.info(
         f"Start time: {start.strftime('%H:%M:%S')}\n"
         f"Finish time: {finish.strftime('%H:%M:%S')}\n"
         f"Execution: {(finish - start).total_seconds() * 10 ** 3} ms"
