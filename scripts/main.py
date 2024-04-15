@@ -19,8 +19,8 @@ def merge_dicts(list_of_dicts: list) -> dict:
 
 
 def main():
-    dataframe, dataframe_size = get_image_urls()
-    get_urls_packs = split_urls_into_package(dataframe, dataframe_size)
+    images_df, df_size = get_image_urls()
+    get_urls_packs = split_urls_into_package(images_df, df_size)
 
     all_sizes_list = []
     for pack in get_urls_packs:
