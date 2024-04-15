@@ -2,12 +2,14 @@ import os
 import configparser
 
 import pandas as pd
+from dotenv import load_dotenv
 
+load_dotenv()
 
 SHEET_ID = os.getenv("GOOGLE_SHEET_ID")
 
 config = configparser.ConfigParser()
-config.read("config.ini")
+config.read("../config.ini")
 
 SHEET_NAME = config["GoogleSheetConfig"]["sheet_name"]
 IMAGE_SIZES_RESULT_FILE = config["GoogleSheetConfig"]["image_sizes_result_file"]
@@ -21,7 +23,11 @@ def get_sheet_data() -> pd.DataFrame:
         f"{SHEET_ID}/gviz/tq?tqx=out:csv&sheet={SHEET_NAME}"
     )
 
-    return pd.read_csv(url)
+    df = pd.read_csv(url)
+
+    print("Successfully read image df")
+
+    return df
 
 
 def get_image_urls() -> tuple[pd.DataFrame, int]:
@@ -41,7 +47,7 @@ def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
 
     for i in range(packs_amount):
         yield df[pack_size * i: pack_size * (i + 1)].to_dict()
-
+    print(f"Urls splitted into {packs_amount} packs")
     return df[pack_size * packs_amount:].to_dict()
 
 
@@ -52,8 +58,10 @@ def update_sheet_size_column(sizes: dict):
     sizes_df = pd.DataFrame({SIZE_COLUMN_NAME: sizes_list})
     images_df.update(sizes_df)
 
-    with pd.ExcelWriter(IMAGE_SIZES_RESULT_FILE, engine="openpyxl") as writer:
+    with pd.ExcelWriter(f"../data/IMAGE_SIZES_RESULT_FILE", engine="openpyxl") as writer:
         images_df.to_excel(writer, sheet_name=SHEET_NAME, index=False)
+
+    print("Sizes excel file created succesfully")
 
 
 if __name__ == "__main__":
