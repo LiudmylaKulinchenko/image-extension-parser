@@ -1,9 +1,17 @@
+import os
+import configparser
+
 import pandas as pd
 
-SHEET_ID = "1QX2IhFyYmGDFMvovw2WFz3wAT4piAZ_8hi5Lzp7LjV0"
-SHEET_NAME = "feed"
-NEW_SHEET_FILE = "Parser_ImageSize.xlsx"
-COLUMN_NAME = "SIZE"
+
+SHEET_ID = os.getenv('GOOGLE_SHEET_ID')
+
+config = configparser.ConfigParser()
+config.read('config.ini')
+
+SHEET_NAME = config['GoogleSheetConfig']['sheet_name']
+IMAGE_SIZES_RESULT_FILE = config['GoogleSheetConfig']['image_sizes_result_file']
+SIZE_COLUMN_NAME = config['GoogleSheetConfig']['size_column_name']
 
 
 def get_sheet_data() -> pd.DataFrame:
@@ -43,8 +51,12 @@ def update_sheet_size_column(sizes: dict):
     """Update size column with new data"""
     data = get_sheet_data()
     sizes_list = list(sizes.values())
-    new_data = pd.DataFrame({COLUMN_NAME: sizes_list})
+    new_data = pd.DataFrame({SIZE_COLUMN_NAME: sizes_list})
     data.update(new_data)
 
-    with pd.ExcelWriter(NEW_SHEET_FILE, engine="openpyxl") as writer:
+    with pd.ExcelWriter(IMAGE_SIZES_RESULT_FILE, engine="openpyxl") as writer:
         data.to_excel(writer, sheet_name=SHEET_NAME, index=False)
+
+
+if __name__ == "__main__":
+    print(get_sheet_data())
