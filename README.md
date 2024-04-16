@@ -6,6 +6,8 @@ Script for the parser of image extensions in Python:
 3) Fill in the “SIZE” column in the file where the image extension should be;
 4) The result of the script in the Jupyter Notebook.
 
+[Check this out!](https://docs.google.com/spreadsheets/d/1DFdIXnybCUXwKzJzphH8_35FV5VtU0S_cy7DC0U7t5g/edit?usp=sharing)
+
 ## Project Structure
 * data/ - directory with result Excel files (*check out ImageSizeExample.xlsx*)
 * logs/ - directory with log files
