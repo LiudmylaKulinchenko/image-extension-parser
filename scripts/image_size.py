@@ -2,12 +2,13 @@ import asyncio
 from io import BytesIO
 
 import aiohttp
+import pandas as pd
 from PIL import Image
 
 from logger_setup import logger
 
 
-async def process_image(content) -> str:
+async def process_image(content: bytes) -> str:
     """Process image content to get its size."""
     try:
         with Image.open(BytesIO(content)) as image:
@@ -21,8 +22,8 @@ async def get_size(
     sem: asyncio.Semaphore, row: int, url: str, session: aiohttp.ClientSession
 ):
     """The coroutine gets the image size from the url"""
-    if type(url) != str:
-        return {row: None}
+    if pd.isna(url):
+        return {row: "UrlNotProvided"}
 
     async with sem:
         async with session.get(url) as response:
