@@ -49,5 +49,5 @@ if __name__ == "__main__":
     logger.info(
         f"Start time: {start.strftime('%H:%M:%S')}\n"
         f"Finish time: {finish.strftime('%H:%M:%S')}\n"
-        f"Execution: {(finish - start).total_seconds() * 10 ** 3} ms"
+        f"Execution: {(finish - start).total_seconds()} s"
     )
