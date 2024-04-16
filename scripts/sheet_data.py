@@ -57,17 +57,17 @@ def split_urls_into_package(df: pd.DataFrame, size: int) -> dict:
 
 def create_excel_file_with_image_sizes(sizes: dict):
     """Create excel fiel with image sizes data"""
+
+    sizes_df = pd.DataFrame.from_dict(sizes, orient="index", columns=[SIZE_COLUMN_NAME])
     images_df = get_sheet_data()
-    sizes_list = list(sizes.values())
-    sizes_df = pd.DataFrame({SIZE_COLUMN_NAME: sizes_list})
-    images_df.update(sizes_df)
+    images_df.update({SIZE_COLUMN_NAME: sizes_df[SIZE_COLUMN_NAME]})
 
     with pd.ExcelWriter(
         f"../data/{IMAGE_SIZES_RESULT_FILE}", engine="openpyxl"
     ) as writer:
         images_df.to_excel(writer, sheet_name=SHEET_NAME, index=False)
 
-    print("Succesfully created sizes excel file")
+    logger.info("Succesfully created sizes excel file")
 
 
 if __name__ == "__main__":
